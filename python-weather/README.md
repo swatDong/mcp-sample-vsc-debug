@@ -22,7 +22,7 @@ This is a sample MCP Server in Python implementing weather tools.
 
 - Run VSCode Command "***Python: Select Interpreter***" and select the python from created virtual environment
 
-  (Note: close and reopen the terminal to ensure the virtual environment python is used)
+  (Note: reload VSCode and the terminal to ensure the virtual environment python is used)
 
 - Install dependencies (include dev dependencies)
 
@@ -44,18 +44,6 @@ This is a sample MCP Server in Python implementing weather tools.
 
 ### Debug in MCP Inspector
 
-> **Prerequisites**
->
-> To debug with MCP Inspector, you will need:
->
-> - [Node.js](https://nodejs.org/), since the MCP Inspector is an NPM package.
-
-**Setup MCP Inspector**
-
-- `cd inspector`
-- `npm install`
-
-**Debug**
 - Open VSCode Debug panel. Select `Debug in Inspector (Edge)` or `Debug in Inspector (Chrome)`. Press F5 to start debugging.
 - When MCP Inspector launches in the browser, click the `Connect` button to connect this MCP server.
 - Then you can `List Tools`, select a tool, input parameters, and `Run Tool` to debug you server code.
@@ -70,5 +58,9 @@ This is a sample MCP Server in Python implementing weather tools.
   - then, the MCP Inspector is launched (by default on port 5173 and 3000)
 
   The whole definition can be found in [tasks.json](.vscode/tasks.json). You can also edit [launch.json](.vscode/launch.json), [tasks.json](.vscode/tasks.json), [\_\_init\_\_.py](src/__init__.py) to change above ports.
+
+  > In addition, the [MCP Inspector](https://github.com/modelcontextprotocol/inspector/) is implemented in Node.js. To launch it within this Python project, there are two tricky steps:
+  > 1. Put the bundled inspector client and server to [`inspector/`](inspector/). (Forked and added bundle logic to the inspector's source, see [forked repo's branch](https://github.com/swatDong/inspector/tree/my-bundle))
+  > 2. Launch VSCode executable as Node.js. See [tasks.json](.vscode/tasks.json) and [launcher.py](inspector/launcher.py).
 
 </details>

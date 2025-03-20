@@ -2,6 +2,15 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Start MCP Inspector",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Start MCP Server",
+        "Start MCP Inspector (Server)",
+        "Start MCP Inspector (Client)"
+      ]
+    },
+    {
       "label": "Start MCP Server",
       "type": "shell",
       "command": "python -m debugpy --listen 127.0.0.1:5678 src/__init__.py sse",
@@ -29,15 +38,23 @@
       }
     },
     {
-      "label": "Start MCP Inspector",
+      "label": "Start MCP Inspector (Client)",
       "type": "shell",
-      "command": "npm run dev:inspector",
+      "command": "python",
+      "args": [
+        "launcher.py",
+        "${execPath}", // !!use VSCode as Node.js
+        "client/dist/cli.mjs"
+      ],
       "isBackground": true,
+      "presentation": {
+        "reveal": "silent"
+      },
       "options": {
         "cwd": "${workspaceFolder}/inspector",
         "env": {
-          "CLIENT_PORT": "5173",
-          "SERVER_PORT": "3000",
+          "ELECTRON_RUN_AS_NODE": "1",
+          "PORT": "5173"
         }
       },
       "problemMatcher": {
@@ -51,13 +68,46 @@
         ],
         "background": {
           "activeOnStart": true,
-          "beginsPattern": "Starting MCP inspector",
-          "endsPattern": "Proxy server listening on port"
+          "beginsPattern": ".*",
+          "endsPattern": "Client running on port"
         }
       },
-      "dependsOn": [
-        "Start MCP Server"
-      ]
+    },
+    {
+      "label": "Start MCP Inspector (Server)",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "launcher.py",
+        "${execPath}", // !!use VSCode as Node.js
+        "server/build/index.mjs"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "silent"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/inspector",
+        "env": {
+          "ELECTRON_RUN_AS_NODE": "1",
+          "PORT": "3000"
+        }
+      },
+      "problemMatcher": {
+        "pattern": [
+          {
+            "regexp": "^.*$",
+            "file": 0,
+            "location": 1,
+            "message": 2
+          }
+        ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "Proxy server listening on port|Failed to start server"
+        }
+      },
     },
     {
       "label": "Terminate All Tasks",
